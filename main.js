@@ -60,7 +60,7 @@ function showData() {
         <td>${newToDo[i].title}</td>
         <td>${newToDo[i].description}</td>
         <td>${newToDo[i].date}</td>
-        <td><button onclick = "updateData(${i})">Edit</button></td>
+        <td><button id="edit" onclick = "updateData(${i})">Edit</button></td>
         <td><button id="mybutton" onclick = "toggleStatus(${i})">${newToDo[i].status}</button></td>
         <td><button class="delete" onclick = "deleteData(${i})">Delete</button></td>
         </tr>
@@ -74,10 +74,12 @@ showData();
 function toggleStatus(i) {
     if (newToDo[i].status === "pending") {
         newToDo[i].status = "completed";
+
     } else {
         newToDo[i].status = "pending";
     }
     localStorage.setItem("ToDo", JSON.stringify(newToDo));
+    // document.getElementById("mybutton").style.backgroundColor = "yellow";
     showData();
 }
 
