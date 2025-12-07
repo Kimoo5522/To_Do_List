@@ -6,6 +6,24 @@ let submit = document.getElementById("submit");
 let mood = "create";
 let tmp;
 
+// table row HTML
+function createTableRow(i) {
+    return `
+        <tr>
+        <td>${i + 1}</td>
+        <td>${newToDo[i].title}</td>
+        <td>${newToDo[i].description}</td>
+        <td>${newToDo[i].date}</td>
+        <td><button id="mybutton" onclick="toggleStatus(${i})">${newToDo[i].status}</button></td>
+        <td><button id="edit" onclick="updateData(${i})">Edit</button></td>
+        <td><button class="delete" onclick="deleteData(${i})">Delete</button></td>
+        </tr>
+    `;
+}
+
+
+
+
 // Create
 let newToDo;
 if (localStorage.ToDo != null) {
@@ -13,6 +31,9 @@ if (localStorage.ToDo != null) {
 } else {
     newToDo = [];
 }
+
+
+
 
 
 submit.onclick = function () {
@@ -28,6 +49,7 @@ submit.onclick = function () {
         status: "pending"
     }
 
+
     if (mood === "create") {
         newToDo.push(newObj);
         localStorage.setItem("ToDo", JSON.stringify(newToDo));
@@ -37,10 +59,12 @@ submit.onclick = function () {
         submit.innerHTML = "Create";
     }
 
-
     clearData();
     showData();
 }
+
+
+
 
 
 function clearData() {
@@ -50,25 +74,24 @@ function clearData() {
 }
 
 
+
+
+
+
+
 // Read
 function showData() {
     table = "";
     for (let i = 0; i < newToDo.length; i++) {
-        table += `
-        <tr>
-        <td>${i + 1}</td>
-        <td>${newToDo[i].title}</td>
-        <td>${newToDo[i].description}</td>
-        <td>${newToDo[i].date}</td>
-        <td><button id="mybutton" onclick = "toggleStatus(${i})">${newToDo[i].status}</button></td>
-        <td><button id="edit" onclick = "updateData(${i})">Edit</button></td>
-        <td><button class="delete" onclick = "deleteData(${i})">Delete</button></td>
-        </tr>
-        `
+        table += createTableRow(i);
     }
     document.getElementById("tbody").innerHTML = table;
 }
 showData();
+
+
+
+
 
 // Toggle Status
 function toggleStatus(i) {
@@ -86,6 +109,8 @@ function toggleStatus(i) {
 
 
 
+
+
 // Delete
 function deleteData(i) {
     let msg = confirm("Are you sure you want to delete this task!");
@@ -95,6 +120,10 @@ function deleteData(i) {
     }
     showData();
 }
+
+
+
+
 
 
 // Update
@@ -112,23 +141,51 @@ function updateData(i) {
 }
 
 
+
+
+
 // Search
 function searchData(value) {
+    let filteredData = newToDo.filter(item => item.title.includes(value));
     let table = "";
-    for (let i = 0; i < newToDo.length; i++) {
-        if (newToDo[i].title.includes(value)) {
-            table += `
-            <tr>
-            <td>${i + 1}</td>
-            <td>${newToDo[i].title}</td>
-            <td>${newToDo[i].description}</td>
-            <td>${newToDo[i].date}</td>
-            <td><button onclick = "updateData(${i})">Edit</button></td>
-            <td><button onclick = "toggleStatus(${i})">${newToDo[i].status}</button></td>
-            <td><button  style="background-color:red;" onclick = "deleteData(${i})">Delete</button></td>
-            </tr>
-            `
-        }
+    
+    for (let item of filteredData) {
+        let index = newToDo.indexOf(item);
+        table += createTableRow(index);
     }
+    
     document.getElementById("tbody").innerHTML = table;
 }
+
+
+
+
+
+
+
+
+
+// Search:
+// function searchData(value) {
+//     let table = "";
+//     for (let i = 0; i < newToDo.length; i++) {
+//         if (newToDo[i].title.includes(value)) {
+//             table += createTableRow(i);
+//         }
+//     }
+//     document.getElementById("tbody").innerHTML = table;
+// }
+//----------------------------------------------------------
+// function searchData(value) {
+//     let table = "";
+//     let filteredIndices = newToDo.map((item, index) => ({ item, index }))
+//                                  .filter(({ item }) => item.title.includes(value))
+//                                  .map(({ index }) => index);
+
+//     for (let i of filteredIndices) {
+//         table += createTableRow(i);
+//     }
+
+//     document.getElementById("tbody").innerHTML = table;
+// }
+
